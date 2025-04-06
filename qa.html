@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q&A Forum - Urban Green Haven</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .question-card:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .vote-btn:hover {
+            background-color: #f0fdf4;
+        }
+        .vote-btn.active {
+            background-color: #dcfce7;
+        }
+        .tag:hover {
+            background-color: #dcfce7;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Sticky Header -->
+    <header class="sticky top-0 z-50 bg-white shadow-md">
+        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+            <!-- Logo -->
+            <div class="flex items-center">
+                <img src="https://images.pexels.com/photos/4503273/pexels-photo-4503273.jpeg" 
+                     alt="Urban Green Haven Logo" 
+                     class="h-12 w-12 rounded-full object-cover">
+                <span class="ml-3 text-xl font-bold text-green-600">Urban Green Haven</span>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="hidden md:flex space-x-8">
+                <a href="index.html" class="text-gray-700 hover:text-green-600 font-medium">Home</a>
+                <a href="shop.html" class="text-gray-700 hover:text-green-600 font-medium">Shop</a>
+                <a href="blog.html" class="text-gray-700 hover:text-green-600 font-medium">Blog</a>
+                <a href="#" class="text-green-600 font-medium">Q&A</a>
+                <a href="consultation.html" class="text-gray-700 hover:text-green-600 font-medium">Book Consultation</a>
+                <a href="contact.html" class="text-gray-700 hover:text-green-600 font-medium">Contact</a>
+            </nav>
+
+            <!-- Login/Sign Up & Cart -->
+            <div class="flex items-center space-x-4">
+                <button class="px-4 py-2 text-green-600 border border-green-600 rounded-md hover:bg-green-50">
+                    Login / Sign Up
+                </button>
+                <div class="relative">
+                    <i class="fas fa-shopping-cart text-2xl text-gray-700 hover:text-green-600 cursor-pointer"></i>
+                    <span class="absolute -top-2 -right-2 bg-green-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Q&A Content -->
+    <div class="container mx-auto px-4 py-12">
+        <div class="max-w-6xl mx-auto">
+            <!-- Q&A Header -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8">
+                <div>
+                    <h1 class="text-3xl font-bold mb-2">Community Q&A</h1>
+                    <p class="text-gray-600">Ask questions and get answers from our gardening community</p>
+                </div>
+                <button class="mt-4 md:mt-0 px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition">
+                    Ask a Question
+                </button>
+            </div>
+
+            <!-- Search and Filter -->
+            <div class="bg-white rounded-lg shadow-sm p-4 mb-8">
+                <div class="flex flex-col md:flex-row gap-4">
+                    <!-- Search Bar -->
+                    <div class="relative flex-1">
+                        <input type="text" placeholder="Search questions..." 
+                               class="w-full pl-10 pr-4 py-2 border rounded-md focus:ring-green-500 focus:border-green-500">
+                        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                    </div>
+
+                    <!-- Category Filter -->
+                    <select class="border rounded-md px-3 py-2 text-sm focus:ring-green-500 focus:border-green-500">
+                        <option>All Categories</option>
+                        <option>Plant Care</option>
+                        <option>Pest Control</option>
+                        <option>Soil & Fertilizer</option>
+                        <option>Tools & Equipment</option>
+                        <option>Design & Layout</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Question Form (Initially Hidden) -->
+            <div id="questionForm" class="hidden bg-white rounded-lg shadow-sm p-6 mb-8">
+                <h2 class="text-xl font-semibold mb-4">Ask Your Question</h2>
+                <form>
+                    <div class="mb-4">
+                        <label for="questionTitle" class="block text-sm font-medium text-gray-700 mb-1">Question Title</label>
+                        <input type="text" id="questionTitle" 
+                               class="w-full px-4 py-2 border rounded-md focus:ring-green-500 focus:border-green-500" 
+                               placeholder="Be specific and imagine you're asking a question to another person">
+                    </div>
+                    <div class="mb-4">
+                        <label for="questionDetails" class="block text-sm font-medium text-gray-700 mb-1">Details</label>
+                        <textarea id="questionDetails" rows="4" 
+                                  class="w-full px-4 py-2 border rounded-md focus:ring-green-500 focus:border-green-500" 
+                                  placeholder="Include all the information someone would need to answer your question"></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Tags</label>
+                        <div class="flex flex-wrap gap-2">
+                            <input type="text" 
+                                   class="flex-1 min-w-0 px-4 py-2 border rounded-md focus:ring-green-500 focus:border-green-500" 
+                                   placeholder="Add tags (e.g., tomatoes, fertilizer)">
+                        </div>
+                    </div>
+                    <div class="flex justify-end gap-3">
+                        <button type="button" id="cancelQuestion" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
+                            Cancel
+                        </button>
+                        <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                            Post Question
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Questions List -->
+            <div class="space-y-4">
+                <!-- Question 1 -->
+                <div class="question-card bg-white rounded-lg shadow-sm p-6 transition">
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <!-- Votes -->
+                        <div class="flex md:flex-col items-center gap-2">
+                            <button class="vote-btn w-10 h-10 rounded-md flex items-center justify-center text-gray-500 hover:text-green-600">
+                                <i class="fas fa-chevron-up text-xl"></i>
+                            </button>
+                            <span class="font-medium text-gray-700">24</span>
+                            <button class="vote-btn w-10 h-10 rounded-md flex items-center justify-center text-gray-500 hover:text-green-600">
+                                <i class="fas fa-chevron-down text-xl"></i>
+                            </button>
+                            <div class="md:mt-2 text-green-600 text-sm">
+                                <i class="fas fa-check"></i>
+                            </div>
+                        </div>
+                        
+                        <!-- Question Content -->
+                        <div class="flex-1">
+                            <h2 class="text-xl font-semibold mb-2 hover:text-green-600 cursor-pointer">
+                                How often should I water my rooftop tomato plants in summer?
+                            </h2>
+                            <p class="text-gray-600 mb-3">
+                                I've recently started a small rooftop garden with tomato plants. With the summer heat, I'm not sure how often to water them. The plants get about 6 hours of direct sunlight daily. Should I water daily or every other day?
+                            </p>
+                            
+                            <!-- Tags -->
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="tag px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full cursor-pointer">tomatoes</span>
+                                <span class="tag px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full cursor-pointer">watering</span>
+                                <span class="tag px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full cursor-pointer">summer-care</span>
+                            </div>
+                            
+                            <!-- Meta -->
+                            <div class="flex flex-wrap items-center justify-between text-sm text-gray-500">
+                                <div class="flex items-center">
+                                    <img src="https://images.pexels.com/photos/3777943/pexels-photo-3777943.jpeg" 
+                                         alt="User" 
+                                         class="w-6 h-6 rounded-full mr-2">
+                                    <span>JohnDoe</span>
+                                    <span class="mx-2">·</span>
+                                    <span>asked 2 days ago</span>
+                                </div>
+                                <div class="flex items-center mt-2 sm:mt-0">
+                                    <i class="far fa-comment mr-1"></i>
+                                    <span>5 answers</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Top Answer (Collapsible) -->
+                    <div class="mt-4 pl-0 md:pl-16">
+                        <div class="bg-green-50 rounded-lg p-4 border border-green-100">
+                            <div class="flex items-start mb-2">
+                                <div class="flex items-center mr-3">
+                                    <img src="https://images.pexels.com/photos/3763188/pexels-photo-3763188.jpeg" 
+                                         alt="Expert" 
+                                         class="w-8 h-8 rounded-full">
+                                </div>
+                                <div>
+                                    <div class="flex items-center">
+                                        <span class="font-medium mr-2">SarahGreen</span>
+                                        <span class="text-xs px-2 py-0.5 bg-green-600 text-white rounded-full">Expert</span>
+                                    </div>
+                                    <p class="text-xs text-gray-500">answered 1 day ago</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-700 pl-11">
+                                For rooftop tomatoes in summer, I recommend watering daily in the early morning. The key is to check the soil moisture - it should be moist but not soggy. Stick your finger about an inch into the soil; if it feels dry, it's time to water. Consider adding mulch to retain moisture.
+                            </p>
+                            <div class="flex items-center justify-end mt-2 space-x-3 text-sm">
+                                <button class="text-gray-500 hover:text-green-600">
+                                    <i class="far fa-thumbs-up mr-1"></i> 12
+                                </button>
+                                <button class="text-gray-500 hover:text-green-600">
+                                    <i class="far fa-comment mr-1"></i> Reply
+                                </button>
+                            </div>
+                        </div>
+                        <button class="mt-2 text-sm text-green-600 hover:underline pl-11">
+                            View all 5 answers
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="question-card bg-white rounded-lg shadow-sm p-6 transition">
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <!-- Votes -->
+                        <div class="flex md:flex-col items-center gap-2">
+                            <button class="vote-btn w-10 h-10 rounded-md flex items-center justify-center text-gray-500 hover:text-green-600">
+                                <i class="fas fa-chevron-up text-xl"></i>
+                            </button>
+                            <span class="font-medium text-gray-700">18</span>
+                            <button class="vote-btn w-10 h-10 rounded-md flex items-center justify-center text-gray-500 hover:text-green-600">
+                                <i class="fas fa-chevron-down text-xl"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Question Content -->
+                        <div class="flex-1">
+                            <h2 class="text-xl font-semibold mb-2 hover:text-green-600 cursor-pointer">
+                                Best organic pest control for aphids on my herbs?
+                            </h2>
+                            <p class="text-gray-600 mb-3">
+                                My rooftop herb garden (basil, mint, parsley) has been invaded by aphids. I want to avoid chemical pesticides. What are the most effective organic methods to control them? I've tried neem oil with limited success.
+                            </p>
+                            
+                            <!-- Tags -->
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="tag px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full cursor-pointer">pest-control</span>
+                                <span class="tag px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full cursor-pointer">herbs</span>
+                                <span class="tag px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full cursor-pointer">organic</span>
+                            </div>
+                            
+                            <!-- Meta -->
+                            <div class="flex flex-wrap items-center justify-between text-sm text-gray-500">
+                                <div class="flex items-center">
+                                    <img src="https://images.pexels.com/photos/3778603/pexels-photo-3778603.jpeg" 
+                                         alt="User" 
+                                         class="w-6 h-6 rounded-full mr-2">
+                                    <span>EmmaG</span>
+                                    <span class="mx-2">·</span>
+                                    <span>asked 5 days ago</span>
+                                </div>
+                                <div class="flex items-center mt-2 sm:mt-0">
+                                    <i class="far fa-comment mr-1"></i>
+                                    <span>3 answers</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="question-card bg-white rounded-lg shadow-sm p-6 transition">
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <!-- Votes -->
+                        <div class="flex md:flex-col items-center gap-2">
+                            <button class="vote-btn w-10 h-10 rounded-md flex items-center justify-center text-gray-500 hover:text-green-600">
+                                <i class="fas fa-chevron-up text-xl"></i>
+                            </button>
+                            <span class="font-medium text-gray-700">9</span>
+                            <button class="vote-btn w-10 h-10 rounded-md flex items-center justify-center text-gray-500 hover:text-green-600">
+                                <i class="fas fa-chevron-down text-xl"></i>
+                            </button>
+                            <div class="md:mt-2 text-green-600 text-sm">
+                                <i class="fas fa-check"></i>
+                            </div>
+                        </div>
+                        
+                        <!-- Question Content -->
+                        <div class="flex-1">
+                            <h2 class="text-xl font-semibold mb-2 hover:text-green-600 cursor-pointer">
+                                What's the lightest soil mix for rooftop containers?
+                            </h2>
+                            <p class="text-gray-600 mb-3">
+                                I'm setting up a rooftop garden but need to keep weight to a minimum. What's the best lightweight soil mix that still provides good nutrients for vegetables? I'm growing tomatoes, peppers, and leafy greens.
+                            </p>
+                            
+                            <!-- Tags -->
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="tag px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full cursor-pointer">soil</span>
+                                <span class="tag px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full cursor-pointer">containers</span>
+                                <span class="tag px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full cursor-pointer">vegetables</span>
+                            </div>
+                            
+                            <!-- Meta -->
+                            <div class="flex flex-wrap items-center justify-between text-sm text-gray-500">
+                                <div class="flex items-center">
+                                    <img src="https://images.pexels.com/photos/3769021/pexels-photo-3769021.jpeg" 
+                                         alt="User" 
+                                         class="w-6 h-6 rounded-full mr-2">
+                                    <span>MikeR</span>
+                                    <span class="mx-2">·</span>
+                                    <span>asked 1 week ago</span>
+                                </div>
+                                <div class="flex items-center mt-2 sm:mt-0">
+                                    <i class="far fa-comment mr-1"></i>
+                                    <span>7 answers</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 4 -->
+                <div class="question-card bg-white rounded-lg shadow-sm p-6 transition">
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <!-- Votes -->
+                        <div class="flex md:flex-col items-center gap-2">
+                            <button class="vote-btn w-10 h-10 rounded-md flex items-center justify-center text-gray-500 hover:text-green-600">
+                                <i class="fas fa-chevron-up text-xl"></i>
+                            </button>
+                            <span class="font-medium text-gray-700">5</span>
+                            <button class="vote-btn w-10 h-10 rounded-md flex items-center justify-center text-gray-500 hover:text-green-600">
+                                <i class="fas fa-chevron-down text-xl"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Question Content -->
+                        <div class="flex-1">
+                            <h2 class="text-xl font-semibold mb-2 hover:text-green-600 cursor-pointer">
+                                Best flowers for windy rooftop conditions?
+                            </h2>
+                            <p class="text-gray-600 mb-3">
+                                My 10th floor rooftop gets quite windy. Most flowers I've tried get damaged. Any recommendations for wind-resistant flowering plants that can handle these conditions? Preferably ones that attract pollinators too.
+                            </p>
+                            
+                            <!-- Tags -->
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="tag px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full cursor-pointer">flowers</span>
+                                <span class="tag px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full cursor-pointer">wind-resistant</span>
+                                <span class="tag px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full cursor-pointer">pollinators</span>
+                            </div>
+                            
+                            <!-- Meta -->
+                            <div class="flex flex-wrap items-center justify-between text-sm text-gray-500">
+                                <div class="flex items-center">
+                                    <img src="https://images.pexels.com/photos/3777943/pexels-photo-3777943.jpeg" 
+                                         alt="User" 
+                                         class="w-6 h-6 rounded-full mr-2">
+                                    <span>LisaT</span>
+                                    <span class="mx-2">·</span>
+                                    <span>asked 3 days ago</span>
+                                </div>
+                                <div class="flex items-center mt-2 sm:mt-0">
+                                    <i class="far fa-comment mr-1"></i>
+                                    <span>2 answers</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="flex justify-center mt-8">
+                <nav class="flex items-center space-x-2">
+                    <button class="px-3 py-1 rounded-md border text-gray-600 hover:bg-gray-100">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="px-3 py-1 rounded-md bg-green-600 text-white">1</button>
+                    <button class="px-3 py-1 rounded-md border text-gray-600 hover:bg-gray-100">2</button>
+                    <button class="px-3 py-1 rounded-md border text-gray-600 hover:bg-gray-100">3</button>
+                    <span class="px-2">...</span>
+                    <button class="px-3 py-1 rounded-md border text-gray-600 hover:bg-gray-100">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Urban Green Haven</h3>
+                    <p class="text-gray-400">Bringing nature to urban spaces through rooftop gardening solutions.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">About Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Terms of Service</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Connect</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Newsletter</h4>
+                    <form class="flex">
+                        <input type="email" placeholder="Your email" class="px-4 py-2 rounded-l-md w-full text-gray-800">
+                        <button type="submit" class="bg-green-600 px-4 py-2 rounded-r-md hover:bg-green-700">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2023 Urban Green Haven. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Chatbot -->
+    <div class="fixed bottom-6 right-6 z-50">
+        <div class="bg-green-600 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg cursor-pointer hover:bg-green-700 transition">
+            <i class="fas fa-comment-dots text-2xl"></i>
+        </div>
+    </div>
+
+    <script>
+        // Question form toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const askBtn = document.querySelector('button:contains("Ask a Question")');
+            const questionForm = document.getElementById('questionForm');
+            const cancelBtn = document.getElementById('cancelQuestion');
+            
+            askBtn.addEventListener('click', function() {
+                questionForm.classList.remove('hidden');
+                askBtn.classList.add('hidden');
+                window.scrollTo({
+                    top: questionForm.offsetTop - 20,
+                    behavior: 'smooth'
+                });
+            });
+            
+            cancelBtn.addEventListener('click', function() {
+                questionForm.classList.add('hidden');
+                askBtn.classList.remove('hidden');
+            });
+            
+            // Voting functionality
+            const voteBtns = document.querySelectorAll('.vote-btn');
+            voteBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const isUpvote = this.querySelector('.fa-chevron-up');
+                    const isDownvote = this.querySelector('.fa-chevron-down');
+                    const voteCount = this.parentElement.querySelector('span');
+                    
+                    if (this.classList.contains('active')) {
+                        // Remove vote
+                        this.classList.remove('active');
+                        let count = parseInt(voteCount.textContent);
+                        if (isUpvote) count--;
+                        if (isDownvote) count++;
+                        voteCount.textContent = count;
+                    } else {
+                        // Add new vote
+                        const siblingActive = this.parentElement.querySelector('.active');
+                        if (siblingActive) siblingActive.classList.remove('active');
+                        
+                        this.classList.add('active');
+                        let count = parseInt(voteCount.textContent);
+                        if (isUpvote) count++;
+                        if (isDownvote) count--;
+                        voteCount.textContent = count;
+                    }
+                });
+            });
+            
+            // Search functionality
+            const searchInput = document.querySelector('input[type="text"]');
+            const questionCards = document.querySelectorAll('.question-card');
+            
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                
+                questionCards.forEach(card => {
+                    const title = card.querySelector('h2').textContent.toLowerCase();
+                    const content = card.querySelector('p').textContent.toLowerCase();
+                    const tags = Array.from(card.querySelectorAll('.tag')).map(tag => tag.textContent.toLowerCase());
+                    
+                    if (title.includes(searchTerm) || 
+                        content.includes(searchTerm) || 
+                        tags.some(tag => tag.includes(searchTerm))) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
